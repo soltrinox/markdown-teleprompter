@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Markdown teleprompter</title>
+  </head>
+  <body class="h-dvh overflow-hidden bg-neutral-950 text-neutral-100">
+    <header
+      id="control-bar"
+      class="control-bar fixed top-0 left-0 right-0 z-50 border-b border-neutral-800 bg-neutral-950/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)]"
+    >
+      <div
+        class="mx-auto flex max-w-[100vw] flex-col gap-2 px-3 py-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2 sm:px-4 sm:py-3"
+      >
+        <div class="flex min-w-0 flex-wrap items-center gap-2">
+          <label
+            class="cursor-pointer inline-flex shrink-0 items-center gap-2 rounded-lg bg-neutral-800 px-3 py-2 text-sm font-medium hover:bg-neutral-700"
+          >
+            <input id="file-input" type="file" accept=".md,.txt,text/markdown,text/plain" class="hidden" />
+            Open file
+          </label>
+          <span id="drop-hint" class="hidden text-sm text-neutral-500 sm:inline"
+            >or drag .md / .txt here</span
+          >
+        </div>
+        <div class="flex flex-wrap items-center gap-2 sm:ml-auto">
+          <button
+            id="btn-play"
+            type="button"
+            class="shrink-0 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-40 sm:px-4"
+          >
+            Play
+          </button>
+          <button
+            id="btn-pause"
+            type="button"
+            class="shrink-0 rounded-lg bg-neutral-700 px-3 py-2 text-sm font-semibold hover:bg-neutral-600 disabled:opacity-40 sm:px-4"
+            disabled
+          >
+            Pause
+          </button>
+          <button
+            id="btn-prev"
+            type="button"
+            aria-label="Previous phrase"
+            class="shrink-0 rounded-lg border border-neutral-600 px-2.5 py-2 text-sm hover:bg-neutral-800 sm:px-3"
+          >
+            Prev
+          </button>
+          <button
+            id="btn-next"
+            type="button"
+            aria-label="Next phrase"
+            class="shrink-0 rounded-lg border border-neutral-600 px-2.5 py-2 text-sm hover:bg-neutral-800 sm:px-3"
+          >
+            Next
+          </button>
+          <button
+            id="btn-restart-chapter"
+            type="button"
+            class="shrink-0 rounded-lg border border-neutral-600 px-2.5 py-2 text-sm hover:bg-neutral-800 sm:px-3"
+          >
+            <span class="sm:hidden">Restart</span>
+            <span class="hidden sm:inline">Restart chapter</span>
+          </button>
+        </div>
+        <div
+          class="flex min-w-0 items-center gap-2 border-t border-neutral-800/80 pt-2 sm:w-auto sm:min-w-[min(100%,220px)] sm:border-t-0 sm:pt-0 md:ml-0 md:flex-1 md:justify-end lg:max-w-md lg:flex-none"
+        >
+          <label for="speed" class="shrink-0 text-xs text-neutral-400">ms / phrase</label>
+          <button
+            id="btn-speed-down"
+            type="button"
+            aria-label="Faster - fewer milliseconds per phrase"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-neutral-600 bg-neutral-800 text-lg font-semibold leading-none text-neutral-100 hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            −
+          </button>
+          <input
+            id="speed"
+            type="range"
+            min="200"
+            max="2000"
+            step="50"
+            value="600"
+            class="min-w-0 flex-1 accent-emerald-500 sm:max-w-[12rem] md:max-w-none"
+          />
+          <button
+            id="btn-speed-up"
+            type="button"
+            aria-label="Slower - more milliseconds per phrase"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-neutral-600 bg-neutral-800 text-lg font-semibold leading-none text-neutral-100 hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            +
+          </button>
+          <span id="speed-value" class="shrink-0 text-xs tabular-nums text-neutral-400 w-10 sm:w-12">600</span>
+        </div>
+      </div>
+    </header>
+
+    <div
+      id="app"
+      class="flex h-dvh flex-col overflow-hidden pt-[var(--control-bar-h,5.75rem)] [--control-bar-h:5.75rem]"
+    >
+      <div class="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+        <main
+          id="drop-zone"
+          class="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:px-10 md:py-8"
+        >
+          <article
+            id="content"
+            class="prose prose-invert prose-lg max-w-none text-center text-[2.5rem] leading-relaxed [&_p]:my-6 [&_li]:my-2 [&_ol]:list-inside [&_ul]:list-inside [&_ol]:pl-0 [&_ul]:pl-0"
+          >
+            <p class="text-neutral-500 text-xl !my-0">
+              Load a Markdown or text file to begin. Use <code class="text-neutral-300">$inline$</code> and
+              <code class="text-neutral-300">$$display$$</code> for math.
+            </p>
+          </article>
+        </main>
+        <aside
+          class="outline-sidebar hidden h-full min-h-0 w-80 shrink-0 flex-col border-l border-neutral-800 bg-neutral-900/80 lg:flex"
+        >
+          <div class="shrink-0 border-b border-neutral-800 p-3 text-sm font-semibold text-neutral-400">Outline</div>
+          <nav id="outline" class="outline-nav min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 text-sm"></nav>
+        </aside>
+        <details
+          class="group fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 lg:hidden"
+        >
+          <summary
+            class="cursor-pointer list-none rounded-full bg-emerald-700 px-4 py-2 text-sm font-semibold shadow-lg ring-1 ring-black/20"
+          >
+            Outline
+          </summary>
+          <div
+            class="absolute bottom-12 right-0 w-[min(90vw,20rem)] max-h-[min(50vh,calc(100dvh-var(--control-bar-h,5.75rem)-5rem))] overflow-y-auto rounded-lg border border-neutral-700 bg-neutral-900 p-2 shadow-xl"
+          >
+            <nav id="outline-mobile" class="text-sm"></nav>
+          </div>
+        </details>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

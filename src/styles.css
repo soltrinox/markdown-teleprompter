@@ -1,0 +1,173 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Fixed control bar: safe area on notched devices (padding applied in addition to inner flex padding) */
+.control-bar {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+
+/* Main document panel: centered prose (sidebar outline stays left-aligned) */
+#content.prose blockquote {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#content .katex-display {
+  text-align: center;
+}
+
+/* KaTeX (bundled via JS import in main.js pulls CSS) */
+
+.prompter-word.prompter-sentence-active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.1em;
+}
+
+.prompter-word.prompter-phrase {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.prompter-word.prompter-phrase-last {
+  color: rgb(74 222 128);
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.9));
+}
+
+/* Legacy wrap-based highlights (cleared on content load) */
+.prompter-sentence-bg {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.1em;
+}
+
+.prompter-phrase {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.prompter-phrase-last {
+  color: rgb(74 222 128);
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.9));
+}
+
+/* Desktop outline: pinned in viewport; nav scrolls independently */
+.outline-sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.outline-nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Collapsible outline tree */
+.outline-tree,
+.outline-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.outline-children {
+  padding-left: 0.35rem;
+  margin-left: 0.65rem;
+  border-left: 1px solid rgb(64 64 64 / 0.6);
+}
+
+.outline-item {
+  margin: 0;
+}
+
+.outline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.outline-toggle,
+.outline-toggle-spacer {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.outline-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: rgb(163 163 163);
+  cursor: pointer;
+  padding: 0;
+}
+
+.outline-toggle:hover {
+  background-color: rgb(38 38 38);
+  color: rgb(229 229 229);
+}
+
+.outline-chevron {
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+.outline-toggle-expanded .outline-chevron {
+  transform: rotate(45deg);
+}
+
+.outline-link {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  color: rgb(212 212 212);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outline-link:hover {
+  background-color: rgb(38 38 38);
+  color: rgb(255 255 255);
+}
+
+.outline-link[data-level="1"] {
+  padding-left: 0.5rem;
+}
+
+.outline-link[data-level="2"] {
+  padding-left: 0.65rem;
+}
+
+.outline-link[data-level="3"] {
+  padding-left: 0.8rem;
+}
+
+.outline-link[data-level="4"] {
+  padding-left: 0.95rem;
+}
+
+.outline-link[data-level="5"] {
+  padding-left: 1.1rem;
+}
+
+.outline-link[data-level="6"] {
+  padding-left: 1.25rem;
+}

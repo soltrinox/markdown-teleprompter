@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.git/
+Dockerfile
+nginx.conf
+src/**/*.test.js
+tests/
+test-results/
+playwright-report/
+.github/
